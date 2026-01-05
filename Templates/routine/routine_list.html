@@ -1,0 +1,30 @@
+<h2>Routine List</h2>
+
+<a href="{% url 'routine:routine_create' %}">➕ Add Routine</a>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>Title</th>
+        <th>Day</th>
+        <th>Subject</th>
+        <th>Time</th>
+        <th>Room</th>
+        <th>Action</th>
+    </tr>
+
+    {% for r in routines %}
+    <tr>
+        <td>{{ r.title }}</td>
+        <td>{{ r.day }}</td>
+        <td>{{ r.subject }}</td>
+        <td>{{ r.start_time }} - {{ r.end_time }}</td>
+        <td>{{ r.room }}</td>
+        <td>
+            <a href="{% url 'routine:routine_update' r.id %}">✏️ Edit</a> |
+            <a href="{% url 'routine:routine_delete' r.id %}">🗑️ Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No routine found</td></tr>
+    {% endfor %}
+</table>

@@ -1,0 +1,10 @@
+<h2>Routine Form</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+<a href="{% url 'routine:routine_list' %}">Back</a>
+

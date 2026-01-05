@@ -23,7 +23,7 @@ urlpatterns = [
    
      # members app urls
     path('notice/', include('notice.urls', namespace='notice')),
-
+    path('routine/', include('routine.urls', namespace='routine')),
     # home page
     path('', home, name='home'),
 

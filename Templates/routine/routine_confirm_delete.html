@@ -1,0 +1,11 @@
+<h3>Are you sure you want to delete?</h3>
+
+<p>{{ routine.title }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Yes, Delete</button>
+</form>
+
+<a href="{% url 'routine:routine_list' %}">Cancel</a>
+
