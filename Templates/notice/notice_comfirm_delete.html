@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
+
+            <h4 class="text-danger mb-3">
+                Are you sure?
+            </h4>
+
+            <p>
+                You are about to delete:
+                <strong>{{ notice.title }}</strong>
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    Yes, Delete
+                </button>
+
+                <a href="{% url 'notice:notice_list' %}"
+                   class="btn btn-secondary ms-2">
+                    Cancel
+                </a>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

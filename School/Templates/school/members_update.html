@@ -1,0 +1,17 @@
+{% extends 'School/base.html' %}
+{% block title %}Update Member{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+  <div class="card-header bg-primary text-white">
+    <h4>Update Member</h4>
+  </div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="btn btn-success">Update</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
