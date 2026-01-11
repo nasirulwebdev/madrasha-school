@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     # custom apps
     
    
-     'notice.apps.NoticeConfig',
+    'notice.apps.NoticeConfig',
     'routine',
     'Student', 
     'School',
+    'academic',
 ]
 
 MIDDLEWARE = [
