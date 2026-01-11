@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <h2>Routine Dashboard</h2>
 
 <form method="GET" class="d-flex gap-2 mb-3">
@@ -59,3 +61,4 @@
     <tr><td colspan="6">No routine found</td></tr>
     {% endfor %}
 </table>
+{% endblock %}
