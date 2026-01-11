@@ -2,6 +2,7 @@
 from django.db import models
 
 class Routine(models.Model):
+    class_name = models.CharField(max_length=50)
     title = models.CharField(max_length=200)
     day = models.CharField(max_length=20)
     subject = models.CharField(max_length=100)
