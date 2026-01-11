@@ -1,0 +1,11 @@
+<h2>Academic Information</h2>
+
+{% for a in academics %}
+    <p>
+        <strong>{{ a.title }}</strong><br>
+        {{ a.description }}<br>
+        <small>{{ a.year }}</small>
+    </p>
+{% empty %}
+    <p>No academic data found.</p>
+{% endfor %}
