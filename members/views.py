@@ -13,15 +13,19 @@ class MemberListView(ListView):
     def get_queryset(self):
         queryset = Member.objects.all()
         member_type = self.request.GET.get('member_type')
-
+        search = self.request.GET.get('search')
+        
         if member_type:
             queryset = queryset.filter(member_type__iexact=member_type)
-
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+            
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['selected_type'] = self.request.GET.get('member_type')
+        context['search_query'] = self.request.GET.get('search', '')
         return context
 
 def member_create(request):
