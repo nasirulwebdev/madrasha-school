@@ -79,7 +79,13 @@
 
     </form>
 </div>
+  <!-- ➕ ADD MEMBER BUTTON (RIGHT) -->
+        <a href="{% url 'members_create' %}" class="btn btn-success">
+            + Add New Member
+        </a>
 
+    </div>
+</div>
 <!-- ================= MEMBERS ================= -->
 <div class="container my-5">
   <h4 class="mb-3">Total Members: {{ members.count }}</h4>
