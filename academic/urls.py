@@ -1,6 +1,7 @@
 # academic/urls.py
 from django.urls import path
 from .views import (
+    AcademicDeleteView,
     AcademicStudentListView,
     AcademicFacultyListView,
     AcademicCreateView,
@@ -15,5 +16,6 @@ urlpatterns = [
     path('faculty/', AcademicFacultyListView.as_view(), name='academic_faculty'),
     path('add/', AcademicCreateView.as_view(), name='add_academic'),
     path('edit/<int:pk>/', AcademicUpdateView.as_view(), name='edit_academic'),
+   path('delete/<int:pk>/', AcademicDeleteView.as_view(), name='delete_academic'),
     path('admin/', AcademicAdminListView.as_view(), name='academic_admin'),
 ]

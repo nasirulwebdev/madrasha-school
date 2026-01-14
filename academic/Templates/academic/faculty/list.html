@@ -1,33 +1,39 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+
 {% block content %}
-<h2>Faculty List</h2>
-<a href="{% url 'academic:add_academic' %}" class="btn btn-primary mb-3">Add Faculty</a>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Department</th>
-            <th>Designation</th>
-            <th>Year</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for a in data %}
-        <tr>
-            <td>{{ a.name }}</td>
-            <td>{{ a.email }}</td>
-            <td>{{ a.department }}</td>
-            <td>{{ a.designation }}</td>
-            <td>{{ a.year }}</td>
-            <td>
-                <a href="{% url 'academic:edit_academic' a.pk %}" class="btn btn-warning btn-sm">Edit</a>
-            </td>
-        </tr>
+<div class="container py-5">
+    <h2 class="mb-4">Faculty Academic List</h2>
+
+    <!-- Add Academic Button -->
+    {% if perms.academic.add_academic %}
+    <a href="{% url 'academic:add_academic' %}" class="btn btn-primary mb-4">Add Academic</a>
+    {% endif %}
+
+    <div class="row">
+        {% for item in data %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ item.designation }} | {{ item.department }}</h6>
+                    <p class="card-text">{{ item.description|default:"No description available." }}</p>
+                    <p class="card-text"><small class="text-muted">Year: {{ item.year|default:"-" }}</small></p>
+                    <p class="card-text"><small class="text-muted">Email: {{ item.email }}</small></p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    {% if perms.academic.change_academic %}
+                    <a href="{% url 'academic:edit_academic' item.id %}" class="btn btn-sm btn-warning">Edit</a>
+                    {% endif %}
+                    {% if perms.academic.delete_academic %}
+                    <a href="{% url 'academic:delete_academic' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
         {% empty %}
-        <tr><td colspan="6" class="text-center">No faculty found.</td></tr>
+        <p class="text-center">No data found.</p>
         {% endfor %}
-    </tbody>
-</table>
+    </div>
+</div>
 {% endblock %}

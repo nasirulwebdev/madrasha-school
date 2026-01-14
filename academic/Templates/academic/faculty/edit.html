@@ -1,10 +1,69 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+
 {% block content %}
-<h2>Edit Academic</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Update</button>
-    <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container py-5">
+    <h2 class="mb-4">Edit Academic</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Name</label>
+                    {{ form.name|add_class:"form-control" }}
+                    {% if form.name.errors %}
+                        <div class="text-danger">{{ form.name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_designation" class="form-label">Designation</label>
+                    {{ form.designation|add_class:"form-control" }}
+                    {% if form.designation.errors %}
+                        <div class="text-danger">{{ form.designation.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_department" class="form-label">Department</label>
+                    {{ form.department|add_class:"form-control" }}
+                    {% if form.department.errors %}
+                        <div class="text-danger">{{ form.department.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email|add_class:"form-control" }}
+                    {% if form.email.errors %}
+                        <div class="text-danger">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_year" class="form-label">Year</label>
+                    {{ form.year|add_class:"form-control" }}
+                    {% if form.year.errors %}
+                        <div class="text-danger">{{ form.year.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description</label>
+                    {{ form.description|add_class:"form-control" }}
+                    {% if form.description.errors %}
+                        <div class="text-danger">{{ form.description.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-success">Update</button>
+                <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

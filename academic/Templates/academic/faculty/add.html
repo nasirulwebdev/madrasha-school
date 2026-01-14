@@ -1,11 +1,20 @@
+{% extends "base.html" %}
 
-{% extends 'base.html' %}
 {% block content %}
-<h2>Add Academic</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Save</button>
-    <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>
-</form>
+<div class="container py-5">
+    <h2 class="mb-4">Add Academic</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

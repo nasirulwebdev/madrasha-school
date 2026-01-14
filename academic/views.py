@@ -1,7 +1,7 @@
 # academic/views.py
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Academic
 from .forms import AcademicForm
@@ -39,7 +39,12 @@ class AcademicUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView
     template_name = 'academic/faculty/edit.html'
     permission_required = 'academic.change_academic'
     success_url = reverse_lazy('academic:academic_faculty')
-
+# Delete Academic
+class AcademicDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    model = Academic
+    template_name = 'academic/faculty/delete.html'  # আমরা simple confirmation template বানাবো
+    permission_required = 'academic.delete_academic'
+    success_url = reverse_lazy('academic:academic_admin')  # delete হলে admin list এ redirect
 # ----------------------------
 # Admin List
 class AcademicAdminListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
