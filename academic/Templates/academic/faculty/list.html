@@ -4,7 +4,13 @@
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4">Academic List</h2>
-
+    {% if perms.academic.add_academic %}
+        <div class="d-flex justify-content-start mb-3">
+            <a href="{% url 'academic:add_academic' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> ➕ Add Academic
+            </a>
+        </div>
+        {% endif %}
     <!-- Search + Filter -->
     <div class="card mb-4 p-3">
         <form method="get" class="row g-2">

@@ -8,11 +8,11 @@
             <small class="text-muted">
                 Total: {{ page_obj.paginator.count }}
             </small>
+       <div class="d-flex justify-content-start mb-3">
+            <a href="{% url 'notice:notice_create' %}" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> ➕ Add Notice
+            </a>
         </div>
-        <a href="{% url 'notice:notice_create' %}" class="btn btn-primary">
-            Add Notice
-        </a>
-    </div>
 
     {% if notices %}
         <div class="table-responsive">
@@ -20,6 +20,8 @@
                 <thead>
                     <tr>
                         <th>Title</th>
+                        <th>Class</th>
+                        <th>Day</th>
                         <th>Preview</th>
                         <th>Created</th>
                         <th class="text-end">Actions</th>
@@ -29,6 +31,8 @@
                 {% for notice in notices %}
                     <tr>
                         <td>{{ notice.title }}</td>
+                        <td>{{ r.class_name }}</td>
+                        <td>{{ r.day }}</td>
                         <td>{{ notice.description|truncatewords:12 }}</td>
                         <td>{{ notice.created_at|date:"M d, Y" }}</td>
                         <td class="text-end">

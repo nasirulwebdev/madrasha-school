@@ -66,8 +66,33 @@
             <a href="{% url 'routine:routine_delete' r.id %}">🗑️ Delete</a>
         </td>
     </tr>
+    
     {% empty %}
     <tr><td colspan="6">No routine found</td></tr>
     {% endfor %}
 </table>
+<!-- ================= Pagination ================= -->
+    {% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="Pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&class={{ class_filter }}&day={{ day_filter }}">Previous</a>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}&search={{ search_query }}&class={{ class_filter }}&day={{ day_filter }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&class={{ class_filter }}&day={{ day_filter }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
 {% endblock %}

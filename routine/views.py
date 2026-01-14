@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Routine
 from .forms import RoutineForm
 from routine import models
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 def routine_list(request):
     routines = Routine.objects.all().order_by('-created_at')
@@ -26,12 +28,20 @@ def routine_list(request):
             models.Q(title__icontains=search_query) |
             models.Q(subject__icontains=search_query)
         )
-    return render(request, 'routine/routine_list.html', {
-        'routines': routines,
+        
+    # Pagination
+    paginator = Paginator(routines, 5)  # 5 per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'routines': page_obj,      # template এ loop করার জন্য
+        'page_obj': page_obj,      # pagination links
         'day_filter': day_filter,
         'class_filter': class_filter,
-        'search_query': search_query,  # pass to template
-    })
+        'search_query': search_query,
+    }
+    return render(request, 'routine/routine_list.html', context)
 
 def routine_create(request):
     if request.method == 'POST':
