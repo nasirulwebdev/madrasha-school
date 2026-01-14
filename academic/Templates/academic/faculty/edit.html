@@ -1,7 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load widget_tweaks %}
-
 
 {% block content %}
 <div class="container py-5">
@@ -11,10 +9,10 @@
         <div class="card-body">
             <form method="POST" novalidate>
                 {% csrf_token %}
-                
+
                 <div class="mb-3">
                     <label for="id_name" class="form-label">Name</label>
-                    {{ form.name|add_class:"form-control" }}
+                    {{ form.name }}
                     {% if form.name.errors %}
                         <div class="text-danger">{{ form.name.errors }}</div>
                     {% endif %}
@@ -22,7 +20,7 @@
 
                 <div class="mb-3">
                     <label for="id_designation" class="form-label">Designation</label>
-                    {{ form.designation|add_class:"form-control" }}
+                    {{ form.designation }}
                     {% if form.designation.errors %}
                         <div class="text-danger">{{ form.designation.errors }}</div>
                     {% endif %}
@@ -30,7 +28,7 @@
 
                 <div class="mb-3">
                     <label for="id_department" class="form-label">Department</label>
-                    {{ form.department|add_class:"form-control" }}
+                    {{ form.department }}
                     {% if form.department.errors %}
                         <div class="text-danger">{{ form.department.errors }}</div>
                     {% endif %}
@@ -38,7 +36,7 @@
 
                 <div class="mb-3">
                     <label for="id_email" class="form-label">Email</label>
-                    {{ form.email|add_class:"form-control" }}
+                    {{ form.email }}
                     {% if form.email.errors %}
                         <div class="text-danger">{{ form.email.errors }}</div>
                     {% endif %}
@@ -46,7 +44,7 @@
 
                 <div class="mb-3">
                     <label for="id_year" class="form-label">Year</label>
-                    {{ form.year|add_class:"form-control" }}
+                    {{ form.year }}
                     {% if form.year.errors %}
                         <div class="text-danger">{{ form.year.errors }}</div>
                     {% endif %}
@@ -54,7 +52,7 @@
 
                 <div class="mb-3">
                     <label for="id_description" class="form-label">Description</label>
-                    {{ form.description|add_class:"form-control" }}
+                    {{ form.description }}
                     {% if form.description.errors %}
                         <div class="text-danger">{{ form.description.errors }}</div>
                     {% endif %}

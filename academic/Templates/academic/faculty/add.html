@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% load widget_tweaks %}
 {% load static %}
+
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4">Add Academic</h2>
@@ -10,7 +10,53 @@
             <form method="POST" novalidate>
                 {% csrf_token %}
 
-                {{ form.as_p }}
+                <div class="mb-3">
+                    <label for="id_name" class="form-label">Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <div class="text-danger">{{ form.name.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_designation" class="form-label">Designation</label>
+                    {{ form.designation }}
+                    {% if form.designation.errors %}
+                        <div class="text-danger">{{ form.designation.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_department" class="form-label">Department</label>
+                    {{ form.department }}
+                    {% if form.department.errors %}
+                        <div class="text-danger">{{ form.department.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-danger">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_year" class="form-label">Year</label>
+                    {{ form.year }}
+                    {% if form.year.errors %}
+                        <div class="text-danger">{{ form.year.errors }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <div class="text-danger">{{ form.description.errors }}</div>
+                    {% endif %}
+                </div>
 
                 <button type="submit" class="btn btn-success">Save</button>
                 <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>

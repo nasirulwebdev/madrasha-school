@@ -1,41 +1,59 @@
-<!-- academic/templates/academic/student/list.html -->
-
 {% extends "base.html" %}
-
 {% load static %}
 
 {% block content %}
 <div class="container py-5">
-    <h2 class="mb-4">Student Academic List</h2>
+    <h2 class="mb-4">Academic List</h2>
 
-    <!-- Add Academic Button -->
-    {% if perms.academic.add_academic %}
-    <a href="{% url 'academic:add_academic' %}" class="btn btn-primary mb-4">Add Academic</a>
-    {% endif %}
+    <!-- Search + Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" name="search" value="{{ request.GET.search }}" class="form-control" placeholder="Search by name">
+                </div>
+                <div class="col-md-3">
+                    <select name="year" class="form-select">
+                        <option value="">All Years</option>
+                        {% for y in years %}
+                        <option value="{{ y }}" {% if request.GET.year == y %}selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select name="email" class="form-select">
+                        <option value="">All Emails</option>
+                        {% for e in emails %}
+                        <option value="{{ e }}" {% if request.GET.email == e %}selected{% endif %}>{{ e }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
+    <!-- Academic Cards -->
     <div class="row">
         {% for item in data %}
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">{{ item.name }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ item.designation }} | {{ item.department }}</h6>
+                    <p class="card-text">
+                        <strong>Designation:</strong> {{ item.designation }} <br>
+                        <strong>Department:</strong> {{ item.department }} <br>
+                        <strong>Year:</strong> {{ item.year|default:"-" }} <br>
+                        <strong>Email:</strong> {{ item.email }}
+                    </p>
                     <p class="card-text">{{ item.description|default:"No description available." }}</p>
-                    <p class="card-text"><small class="text-muted">Year: {{ item.year|default:"-" }}</small></p>
-                    <p class="card-text"><small class="text-muted">Email: {{ item.email }}</small></p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    {% if perms.academic.change_academic %}
-                    <a href="{% url 'academic:edit_academic' item.id %}" class="btn btn-sm btn-warning">Edit</a>
-                    {% endif %}
-                    {% if perms.academic.delete_academic %}
-                    <a href="{% url 'academic:delete_academic' item.id %}" class="btn btn-sm btn-danger">Delete</a>
-                    {% endif %}
                 </div>
             </div>
         </div>
         {% empty %}
-        <p class="text-center">No data found.</p>
+        <p class="text-center text-muted">No data found</p>
         {% endfor %}
     </div>
 </div>
