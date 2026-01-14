@@ -1,9 +1,52 @@
-{% extends 'academic/base.html' %}
+<!-- academic/templates/academic/student/list.html -->
+
+{% extends "academic/base.html" %}
+{% load static %}
+
 {% block content %}
-<h2>Academic Student List</h2>
-{% for a in data %}
-    <p>{{ a.name }} - {{ a.designation }} ({{ a.department }}) - {{ a.email }}</p>
-{% empty %}
-    <p>No academics found.</p>
-{% endfor %}
+<div class="container py-5">
+    <h2 class="mb-4">Student Academic List</h2>
+
+    <!-- Add Academic Button (permission check) -->
+    {% if perms.academic.add_academic %}
+    <a href="{% url 'academic:add_academic' %}" class="btn btn-primary mb-3">Add Academic</a>
+    {% endif %}
+
+    <!-- Table of Students -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.description|default:"-" }}</td>
+                    <td>{{ item.created_at|date:"d M Y" }}</td>
+                    <td>
+                        {% if perms.academic.change_academic %}
+                        <a href="{% url 'academic:edit_academic' item.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        {% endif %}
+                        {% if perms.academic.delete_academic %}
+                        <a href="{% url 'academic:delete_academic' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center">No data found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

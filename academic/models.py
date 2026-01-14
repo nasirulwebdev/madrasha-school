@@ -1,6 +1,4 @@
-# academic/models.py
-from routine import models
-
+from django.db import models
 
 class Academic(models.Model):
     name = models.CharField(max_length=200)
@@ -10,6 +8,13 @@ class Academic(models.Model):
     year = models.CharField(max_length=20, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
 
-
     def __str__(self):
         return self.name
+class Meta:
+        verbose_name = "Academic"
+        verbose_name_plural = "Academics"
+        ordering = ['name']
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['department']),
+        ]

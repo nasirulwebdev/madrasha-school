@@ -1,53 +1,49 @@
+# academic/views.py
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import ListView, CreateView, UpdateView
+from django.urls import reverse_lazy
 from .models import Academic
-from .forms import AcademicForm  # AcademicForm তৈরি করতে হবে
+from .forms import AcademicForm
 
 # ----------------------------
-@login_required
-@permission_required('academic.view_academic', raise_exception=True)
-def academic_list(request):
-    data = Academic.objects.all()
-    return render(request, 'academic/student/list.html', {'data': data})
+# Student List
+class AcademicStudentListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Academic
+    template_name = 'academic/student/list.html'
+    context_object_name = 'data'
+    permission_required = 'academic.view_academic'
 
 # ----------------------------
-@login_required
-@permission_required('academic.view_academic', raise_exception=True)
-def academic_faculty(request):
-    data = Academic.objects.all()
-    return render(request, 'academic/faculty/list.html', {'data': data})
+# Faculty List
+class AcademicFacultyListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Academic
+    template_name = 'academic/faculty/list.html'
+    context_object_name = 'data'
+    permission_required = 'academic.view_academic'
 
 # ----------------------------
-@login_required
-@permission_required('academic.add_academic', raise_exception=True)
-def add_academic(request):
-    if request.method == 'POST':
-        form = AcademicForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('academic:academic_faculty')
-    else:
-        form = AcademicForm()
-    return render(request, 'academic/faculty/add.html', {'form': form})
+# Add Academic
+class AcademicCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Academic
+    form_class = AcademicForm
+    template_name = 'academic/faculty/add.html'
+    permission_required = 'academic.add_academic'
+    success_url = reverse_lazy('academic:academic_faculty')
 
 # ----------------------------
-@login_required
-@permission_required('academic.change_academic', raise_exception=True)
-def edit_academic(request, pk):
-    academic = get_object_or_404(Academic, pk=pk)
-    if request.method == 'POST':
-        form = AcademicForm(request.POST, instance=academic)
-        if form.is_valid():
-            form.save()
-            return redirect('academic:academic_faculty')
-    else:
-        form = AcademicForm(instance=academic)
-    return render(request, 'academic/faculty/edit.html', {'form': form})
+# Edit Academic
+class AcademicUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    model = Academic
+    form_class = AcademicForm
+    template_name = 'academic/faculty/edit.html'
+    permission_required = 'academic.change_academic'
+    success_url = reverse_lazy('academic:academic_faculty')
 
 # ----------------------------
-@login_required
-@permission_required('academic.change_academic', raise_exception=True)
-def academic_admin(request):
-    data = Academic.objects.all()
-    return render(request, 'academic/admin/list.html', {'data': data})
-# ----------------------------
+# Admin List
+class AcademicAdminListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    model = Academic
+    template_name = 'academic/admin/list.html'
+    context_object_name = 'data'
+    permission_required = 'academic.change_academic'
