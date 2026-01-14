@@ -10,11 +10,3 @@ class Academic(models.Model):
 
     def __str__(self):
         return self.name
-class Meta:
-        verbose_name = "Academic"
-        verbose_name_plural = "Academics"
-        ordering = ['name']
-        indexes = [
-            models.Index(fields=['name']),
-            models.Index(fields=['department']),
-        ]
