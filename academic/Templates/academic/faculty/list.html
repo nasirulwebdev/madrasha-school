@@ -1,0 +1,33 @@
+{% extends 'academic/base.html' %}
+{% block content %}
+<h2>Faculty List</h2>
+<a href="{% url 'academic:add_academic' %}" class="btn btn-primary mb-3">Add Faculty</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Designation</th>
+            <th>Year</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in data %}
+        <tr>
+            <td>{{ a.name }}</td>
+            <td>{{ a.email }}</td>
+            <td>{{ a.department }}</td>
+            <td>{{ a.designation }}</td>
+            <td>{{ a.year }}</td>
+            <td>
+                <a href="{% url 'academic:edit_academic' a.pk %}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">No faculty found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

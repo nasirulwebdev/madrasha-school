@@ -1,0 +1,9 @@
+{% extends 'academic/base.html' %}
+{% block content %}
+<h2>Academic Student List</h2>
+{% for a in data %}
+    <p>{{ a.name }} - {{ a.designation }} ({{ a.department }}) - {{ a.email }}</p>
+{% empty %}
+    <p>No academics found.</p>
+{% endfor %}
+{% endblock %}

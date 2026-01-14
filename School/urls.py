@@ -24,11 +24,10 @@ urlpatterns = [
      # members app urls
     path('notice/', include('notice.urls', namespace='notice')),
     path('routine/', include('routine.urls', namespace='routine')),
-    path('academic/', include('academic.urls')),
-    # home page
+     path('academic/', include(('academic.urls', 'academic'), namespace='academic')),
+   # home page
     path('', home, name='home'),
-
-]
+   ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

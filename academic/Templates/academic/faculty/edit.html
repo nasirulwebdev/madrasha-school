@@ -1,0 +1,10 @@
+{% extends 'academic/base.html' %}
+{% block content %}
+<h2>Edit Academic</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Update</button>
+    <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

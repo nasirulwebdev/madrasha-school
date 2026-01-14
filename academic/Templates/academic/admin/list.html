@@ -1,0 +1,13 @@
+{% extends 'academic/base.html' %}
+{% block content %}
+<h2>Academic Admin Panel</h2>
+{% for a in data %}
+    <p>
+        {{ a.name }} - {{ a.designation }} ({{ a.department }}) - {{ a.email }}
+        <a href="{% url 'academic:edit_academic' a.pk %}" class="btn btn-warning btn-sm">Edit</a>
+    </p>
+{% empty %}
+    <p>No academics found.</p>
+{% endfor %}
+<a href="{% url 'academic:add_academic' %}" class="btn btn-primary mt-3">Add New Academic</a>
+{% endblock %}
