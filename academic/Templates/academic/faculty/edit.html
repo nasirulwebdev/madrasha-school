@@ -57,6 +57,21 @@
                         <div class="text-danger">{{ form.description.errors }}</div>
                     {% endif %}
                 </div>
+                <!-- Image Upload & Preview -->
+                <div class="mb-3">
+                    <label for="id_image" class="form-label">Upload Image</label>
+                    {{ form.image }}
+                    {% if form.image.errors %}
+                        <div class="text-danger">{{ form.image.errors }}</div>
+                    {% endif %}
+
+                    {% if form.instance.image %}
+                        <div class="mt-2">
+                            <img src="{{ form.instance.image.url }}" alt="Current Image"
+                                 style="height:120px; object-fit:cover; border:1px solid #ccc; padding:2px;">
+                        </div>
+                    {% endif %}
+                </div>
 
                 <button type="submit" class="btn btn-success">Update</button>
                 <a href="{% url 'academic:academic_faculty' %}" class="btn btn-secondary">Cancel</a>

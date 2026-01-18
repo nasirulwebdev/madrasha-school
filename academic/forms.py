@@ -1,6 +1,7 @@
 # academic/forms.py
 from django import forms
 from .models import Academic
+from django.core.exceptions import ValidationError
 
 class AcademicForm(forms.ModelForm):
     class Meta:
@@ -16,6 +17,7 @@ class AcademicForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows': 4
             }),
+            'image': forms.ClearableFileInput(attrs={'class': 'form-control'}),  # ✅ add this
         }
 
 
@@ -24,3 +26,13 @@ class AcademicForm(forms.ModelForm):
         if not email.endswith('@school.edu'):
             raise forms.ValidationError("Email must be from the domain '@school.edu'")
         return email
+
+     # ✅ Image validation
+    def clean_image(self):
+        image = self.cleaned_data.get('image')
+        if image:
+            valid_extensions = ['jpg', 'jpeg', 'png']
+            ext = image.name.split('.')[-1].lower()
+            if ext not in valid_extensions:
+                raise ValidationError('Only .jpg, .jpeg, .png files are allowed.')
+        return image
