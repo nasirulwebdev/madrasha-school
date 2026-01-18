@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.core.paginator import Paginator
 from .models import Academic
 from .forms import AcademicForm
 
@@ -12,7 +13,8 @@ class AcademicStudentListView(LoginRequiredMixin, PermissionRequiredMixin, ListV
     template_name = 'academic/student/list.html'
     context_object_name = 'data'
     permission_required = 'academic.view_academic'
-
+    paginate_by = 10   # ✅ pagination
+    
     def get_queryset(self):
         queryset = Academic.objects.exclude(designation='Student')  # only teacher/admin
         search = self.request.GET.get('search')
@@ -39,7 +41,8 @@ class AcademicFacultyListView(LoginRequiredMixin, PermissionRequiredMixin, ListV
     template_name = 'academic/faculty/list.html'
     context_object_name = 'data'
     permission_required = 'academic.view_academic'
-
+    paginate_by = 10   # ✅ pagination
+    
     def get_queryset(self):
         queryset = Academic.objects.exclude(designation='Student')  # show only teacher/admin
         search = self.request.GET.get('search')
@@ -93,7 +96,8 @@ class AcademicAdminListView(LoginRequiredMixin, PermissionRequiredMixin, ListVie
     template_name = 'academic/admin/list.html'
     context_object_name = 'data'
     permission_required = 'academic.change_academic'
-
+    paginate_by = 10   # ✅ pagination
+    
     def get_queryset(self):
         queryset = Academic.objects.all()
         search = self.request.GET.get('search')

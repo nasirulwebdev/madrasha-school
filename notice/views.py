@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from members import models
 from notice.models import Notice
 
 class NoticeListView(ListView):
@@ -9,6 +10,24 @@ class NoticeListView(ListView):
     paginate_by = 8
     ordering = ["-created_at"]
 
+def notice_list(request):
+    # Get filter values from GET request
+    day_filter = request.GET.get('day', '')
+    class_filter = request.GET.get('class', '')
+    search_query = request.GET.get('search', '')
+    # Get all routines
+    notices = Notice.objects.all().order_by('-created_at')
+
+    # Apply filters if provided
+    if day_filter:
+        notices = Notice.objects.filter(day__iexact=day_filter)
+    if class_filter:
+        notices = notices.filter(class_name__iexact=class_filter)
+    if search_query:
+        notices = notices.filter(
+            models.Q(title__icontains=search_query) |
+            models.Q(subject__icontains=search_query)
+        )
 class NoticeDetailView(DetailView):
     template_name = "notice/notice_detail.html"
     model = Notice

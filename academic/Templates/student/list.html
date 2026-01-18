@@ -57,4 +57,45 @@
         {% endfor %}
     </div>
 </div>
+{% if is_paginated %}
+<nav class="mt-4">
+  <ul class="pagination justify-content-center">
+
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link"
+           href="?page={{ page_obj.previous_page_number }}&search={{ request.GET.search }}&year={{ request.GET.year }}&email={{ request.GET.email }}">
+           Previous
+        </a>
+      </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if page_obj.number == num %}
+        <li class="page-item active">
+          <span class="page-link">{{ num }}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link"
+             href="?page={{ num }}&search={{ request.GET.search }}&year={{ request.GET.year }}&email={{ request.GET.email }}">
+             {{ num }}
+          </a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link"
+           href="?page={{ page_obj.next_page_number }}&search={{ request.GET.search }}&year={{ request.GET.year }}&email={{ request.GET.email }}">
+           Next
+        </a>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
+{% endif %}
+
 {% endblock %}
