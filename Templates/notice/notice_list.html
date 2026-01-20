@@ -35,7 +35,7 @@
     </select>
 
     <button type="submit" class="btn btn-primary">Filter</button>
-    <a href="{% url 'routine:routine_list' %}" class="btn btn-secondary">Reset</a>
+    <a href="{% url 'notice:notice_list' %}" class="btn btn-secondary">Reset</a>
 </form>
 <div class="container my-4">
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
@@ -67,8 +67,8 @@
                 {% for notice in notices %}
                     <tr>
                         <td>{{ notice.title }}</td>
-                        <td>{{ r.class_name }}</td>
-                        <td>{{ r.day }}</td>
+                        <td>{{ notice.class_name }}</td>
+                        <td>{{ notice.day }}</td>
                         <td>{{ notice.description|truncatewords:12 }}</td>
                         <td>{{ notice.created_at|date:"M d, Y" }}</td>
                         <td class="text-end">
@@ -106,7 +106,8 @@
 
     {% for num in page_obj.paginator.page_range %}
       <li class="page-item {% if page_obj.number == num %}active{% endif %}">
-        <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+       <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+
       </li>
     {% endfor %}
 

@@ -1,7 +1,8 @@
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
-from members import models
+from django.db.models import Q
 from notice.models import Notice
+
 
 class NoticeListView(ListView):
     template_name = "notice/notice_list.html"
@@ -10,24 +11,35 @@ class NoticeListView(ListView):
     paginate_by = 8
     ordering = ["-created_at"]
 
-def notice_list(request):
-    # Get filter values from GET request
-    day_filter = request.GET.get('day', '')
-    class_filter = request.GET.get('class', '')
-    search_query = request.GET.get('search', '')
-    # Get all routines
-    notices = Notice.objects.all().order_by('-created_at')
+    def get_queryset(self):
+        print("🔥 SEARCH VIEW HIT 🔥")
+        qs = super().get_queryset()
 
-    # Apply filters if provided
-    if day_filter:
-        notices = Notice.objects.filter(day__iexact=day_filter)
-    if class_filter:
-        notices = notices.filter(class_name__iexact=class_filter)
-    if search_query:
-        notices = notices.filter(
-            models.Q(title__icontains=search_query) |
-            models.Q(subject__icontains=search_query)
-        )
+        day = self.request.GET.get('day')
+        class_name = self.request.GET.get('class')
+        search = self.request.GET.get('search')
+
+        if day:
+            qs = qs.filter(day__iexact=day)
+
+        if class_name:
+            qs = qs.filter(class_name__iexact=class_name)
+
+        if search:
+            qs = qs.filter(
+                Q(title__icontains=search) |
+                Q(description__icontains=search)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['day_filter'] = self.request.GET.get('day', '')
+        context['class_filter'] = self.request.GET.get('class', '')
+        context['search_query'] = self.request.GET.get('search', '')
+        return context
+
 class NoticeDetailView(DetailView):
     template_name = "notice/notice_detail.html"
     model = Notice

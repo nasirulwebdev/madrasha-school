@@ -3,6 +3,8 @@ from django.db import models
 class Notice(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
+    class_name = models.CharField(max_length=50)   # ⬅️ must
+    day = models.CharField(max_length=20)          # ⬅️ must
     notice_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
 
