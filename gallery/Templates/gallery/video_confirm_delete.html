@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Delete Video{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Are you sure you want to delete this video?</h2>
+    <video class="img-fluid rounded shadow-sm mb-3" controls style="max-height:500px; width:100%;">
+        <source src="{{ video.video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p><strong>{{ video.title }}</strong></p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'gallery:gallery_home' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

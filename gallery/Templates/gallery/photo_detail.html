@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Photo Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ photo.title }}</h2>
+    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow-sm mb-3">
+    <p><small class="text-muted">Uploaded on {{ photo.created_at|date:"d M Y H:i" }}</small></p>
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'gallery:photo_update' photo.id %}" class="btn btn-warning">Update</a>
+        <a href="{% url 'gallery:photo_delete' photo.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'gallery:gallery_home' %}" class="btn btn-secondary">Back to Gallery</a>
+    </div>
+</div>
+{% endblock %}

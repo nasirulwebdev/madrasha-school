@@ -125,18 +125,24 @@
                     </ul>
                 </li>
 
-                 <!-- Gallery -->
+                <!-- Gallery -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         Gallery
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'gallery:photo_list' %}">Photo</a></li>
-                        <li><a class="dropdown-item" href="{% url 'gallery:video_list' %}">Video</a></li>
-
+                        <li>
+                            <a class="dropdown-item" href="{% url 'gallery:gallery_home' %}#photos">
+                                Photos
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{% url 'gallery:gallery_home' %}#videos">
+                                Videos
+                            </a>
+                        </li>
                     </ul>
                 </li>
-
 
                 <!-- Contact -->
                 <li class="nav-item dropdown">

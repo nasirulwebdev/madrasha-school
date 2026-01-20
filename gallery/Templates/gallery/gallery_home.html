@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-5">Gallery</h1>
+
+<!-- ================= Search ================= -->
+<form method="GET" class="d-flex justify-content-center mb-4">
+    <input type="text" name="search" class="form-control w-50 me-2" placeholder="Search photos & videos" value="{{ search_query }}">
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<!-- ================= Masonry Grid ================= -->
+<div class="container">
+    <div class="row g-4 justify-content-center" id="gallery-grid">
+
+        {% for photo in photos %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 gallery-item">
+            <div class="card h-100 shadow-sm gallery-card">
+                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="card-img-top" style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ photo.title }}</h5>
+                    <p class="card-text"><small class="text-muted">{{ photo.created_at|date:"d M Y" }}</small></p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'gallery:photo_detail' photo.id %}" class="btn btn-sm btn-primary">View</a>
+                    <a href="{% url 'gallery:photo_update' photo.id %}" class="btn btn-sm btn-warning">Update</a>
+                    <a href="{% url 'gallery:photo_delete' photo.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        {% for video in videos %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-4 gallery-item">
+            <div class="card h-100 shadow-sm gallery-card">
+                <video class="card-img-top" controls style="height: 250px; object-fit: cover;">
+                    <source src="{{ video.video.url }}" type="video/mp4">
+                </video>
+                <div class="card-body">
+                    <h5 class="card-title">{{ video.title }}</h5>
+                    <p class="card-text"><small class="text-muted">{{ video.created_at|date:"d M Y" }}</small></p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{% url 'gallery:video_detail' video.id %}" class="btn btn-sm btn-primary">View</a>
+                    <a href="{% url 'gallery:video_update' video.id %}" class="btn btn-sm btn-warning">Update</a>
+                    <a href="{% url 'gallery:video_delete' video.id %}" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    {% if not photos and not videos %}
+    <p class="alert alert-info text-center mt-4">No photos or videos uploaded yet.</p>
+    {% endif %}
+</div>
+
+<!-- ================= Masonry JS + CSS Effects ================= -->
+<style>
+.gallery-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.gallery-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+</style>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var grid = document.querySelector('#gallery-grid');
+    new Masonry(grid, {
+        itemSelector: '.gallery-item',
+        columnWidth: '.gallery-item',
+        percentPosition: true,
+        gutter: 20
+    });
+});
+</script>
+
+{% endblock %}
