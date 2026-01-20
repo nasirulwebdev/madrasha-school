@@ -1,4 +1,3 @@
-from urllib import request
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
 from django.core.paginator import Paginator
@@ -38,34 +37,33 @@ def gallery_home(request):
     
 # ---------- ADD ----------
 def photo_add(request):
-     if request.method == 'POST':
+    if request.method == 'POST':
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('gallery:gallery_home')
-     else:
+    else:
         form = PhotoForm()
-     return render(request, 'gallery/form.html', {'form': form, 'title': 'Add Photo'})
+
+    return render(request, 'gallery/form.html', {
+        'form': form,
+        'title': 'Add Photo'
+    })
+
 
 def photo_list(request):
      photos = Photo.objects.all()
-     return render(request, 'gallery/photo_list.html', {'photos': photos})
+     return render(request, 'gallery/photo_list.html', {
+        'photos': photos
+    })
  
-def video_add(request):
-     if request.method == 'POST':
-        form = VideoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('gallery:gallery_home')
-     else:
-        form = VideoForm()
-     return render(request, 'gallery/form.html', {'form': form, 'title': 'Add Video'})
-
 
 # ========== Photo CRUD ==========
 def photo_detail(request, pk):
       photo = get_object_or_404(Photo, pk=pk)
-      return render(request, 'gallery/photo_detail.html', {'photo': photo})
+      return render(request, 'gallery/photo_detail.html', {
+      'photo': photo
+    })
 
 
 def photo_update(request, pk):
@@ -78,35 +76,66 @@ def photo_update(request, pk):
     else:
         form = PhotoForm(instance=photo)
 
-    return render(request, 'gallery/photo_form.html', {'form': form, 'photo': photo})
+    return render(request, 'gallery/photo_form.html', {
+        'form': form,
+        'photo': photo
+    })
 
 def photo_delete(request, pk):
         photo = get_object_or_404(Photo, pk=pk)
         if request.method == 'POST':
             photo.delete()
             return redirect('gallery:gallery_home')
-        return render(request, 'gallery/photo_confirm_delete.html', {'photo': photo})
+        return render(request, 'gallery/photo_confirm_delete.html', {
+            'photo': photo
+        })
 
+# ---------- Video Add ----------
+def video_add(request):
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('gallery:gallery_home')
+    else:
+        form = VideoForm()
+
+    return render(request, 'gallery/form.html', {
+        'form': form,
+        'title': 'Add Video'
+    })
+
+
+# ---------- Video Update ----------
+def video_update(request, pk):
+    video = get_object_or_404(Video, pk=pk)
+    if request.method == 'POST':
+        form = VideoForm(request.POST, request.FILES, instance=video)
+        if form.is_valid():
+            form.save()
+            return redirect('gallery:gallery_home')
+    else:
+        form = VideoForm(instance=video)
+
+    return render(request, 'gallery/video_form.html', {
+        'form': form,
+        'video': video
+    })
     # ========== Video CRUD ==========
 def video_detail(request, pk):
         video = get_object_or_404(Video, pk=pk)
-        return render(request, 'gallery/video_detail.html', {'video': video})
+        return render(request, 'gallery/video_detail.html', {
+        'video': video
+    })
 
-def video_update(request, pk):
-        video = get_object_or_404(Video, pk=pk)
-        if request.method == 'POST':
-            form = VideoForm(request.POST, request.FILES, instance=video)
-            if form.is_valid():
-                form.save()
-                return redirect('gallery:gallery_home')
-        else:
-            form = VideoForm(instance=video)
-        return render(request, 'gallery/video_form.html', {'form': form, 'video': video})
-
+# ---------- Video Delete ----------
 def video_delete(request, pk):
-        video = get_object_or_404(Video, pk=pk)
-        if request.method == 'POST':
-            video.delete()
-            return redirect('gallery:gallery_home')
-        return render(request, 'gallery/video_confirm_delete.html', {'video': video})
+    video = get_object_or_404(Video, pk=pk)
 
+    if request.method == 'POST':
+        video.delete()
+        return redirect('gallery:gallery_home')
+
+    return render(request, 'gallery/video_confirm_delete.html', {
+        'video': video
+    })
