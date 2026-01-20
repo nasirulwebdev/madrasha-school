@@ -1,14 +1,35 @@
 {% extends 'base.html' %}
+
 {% block title %}Update Photo{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Update Photo: {{ photo.title }}</h2>
+<div class="container my-4">
+    <h2>Update Photo</h2>
+    
+    <!-- Update Form -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Save Changes</button>
-        <a href="{% url 'gallery:gallery_home' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Update</button>
     </form>
+
+    <hr>
+
+    <!-- Current Photo -->
+    {% if photo.image %}
+        <img src="{{ photo.image.url }}" alt="Photo" style="max-width:300px;" class="img-fluid mb-2">
+    {% endif %}
+
+   
+    <p id="desc-{{ photo.id }}" style="display:none; margin-top:10px;">
+        {{ photo.description }}
+    </p>
 </div>
+
+<script>
+function toggleDescription(id) {
+    var el = document.getElementById(id);
+    el.style.display = (el.style.display === 'none') ? 'block' : 'none';
+}
+</script>
 {% endblock %}

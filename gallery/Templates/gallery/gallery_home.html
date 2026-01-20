@@ -1,85 +1,106 @@
 {% extends 'base.html' %}
-
 {% block title %}Gallery{% endblock %}
 
 {% block content %}
-<h1 class="text-center mb-5">Gallery</h1>
 
-<!-- ================= Search ================= -->
-<form method="GET" class="d-flex justify-content-center mb-4">
-    <input type="text" name="search" class="form-control w-50 me-2" placeholder="Search photos & videos" value="{{ search_query }}">
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
+<h2 class="text-center mb-4">Gallery</h2>
 
-<!-- ================= Masonry Grid ================= -->
-<div class="container">
-    <div class="row g-4 justify-content-center" id="gallery-grid">
+<!-- FILTER + ADD BUTTONS -->
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <form method="get" class="d-flex gap-2">
+        <input type="text" name="search" class="form-control"
+               placeholder="Search..." value="{{ search_query }}">
+        <select name="type" class="form-select" style="max-width:180px;">
+            <option value="all" {% if filter_type == 'all' %}selected{% endif %}>All</option>
+            <option value="photo" {% if filter_type == 'photo' %}selected{% endif %}>Photos</option>
+            <option value="video" {% if filter_type == 'video' %}selected{% endif %}>Videos</option>
+        </select>
+        <button class="btn btn-primary">Filter</button>
+    </form>
 
-        {% for photo in photos %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 gallery-item">
-            <div class="card h-100 shadow-sm gallery-card">
-                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="card-img-top" style="height: 250px; object-fit: cover;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ photo.title }}</h5>
-                    <p class="card-text"><small class="text-muted">{{ photo.created_at|date:"d M Y" }}</small></p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <a href="{% url 'gallery:photo_detail' photo.id %}" class="btn btn-sm btn-primary">View</a>
-                    <a href="{% url 'gallery:photo_update' photo.id %}" class="btn btn-sm btn-warning">Update</a>
-                    <a href="{% url 'gallery:photo_delete' photo.id %}" class="btn btn-sm btn-danger">Delete</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-
-        {% for video in videos %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-4 gallery-item">
-            <div class="card h-100 shadow-sm gallery-card">
-                <video class="card-img-top" controls style="height: 250px; object-fit: cover;">
-                    <source src="{{ video.video.url }}" type="video/mp4">
-                </video>
-                <div class="card-body">
-                    <h5 class="card-title">{{ video.title }}</h5>
-                    <p class="card-text"><small class="text-muted">{{ video.created_at|date:"d M Y" }}</small></p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <a href="{% url 'gallery:video_detail' video.id %}" class="btn btn-sm btn-primary">View</a>
-                    <a href="{% url 'gallery:video_update' video.id %}" class="btn btn-sm btn-warning">Update</a>
-                    <a href="{% url 'gallery:video_delete' video.id %}" class="btn btn-sm btn-danger">Delete</a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-
+    <div>
+        <a href="{% url 'gallery:photo_add' %}" class="btn btn-success btn-sm">+ Add Photo</a>
+        <a href="{% url 'gallery:video_add' %}" class="btn btn-danger btn-sm">+ Add Video</a>
     </div>
+</div>
 
-    {% if not photos and not videos %}
-    <p class="alert alert-info text-center mt-4">No photos or videos uploaded yet.</p>
+<!-- ================= GALLERY CARDS ================= -->
+<div class="row g-4">
+    {% for item in page_obj %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card gallery-card shadow-sm overflow-hidden position-relative">
+                
+                {% if item.image %}
+                <img src="{{ item.image.url }}" class="card-img-top" style="height:300px; object-fit:cover;">
+                {% elif item.video %}
+                <video controls class="w-100" style="height:300px; object-fit:cover;">
+                    <source src="{{ item.video.url }}" type="video/mp4">
+                </video>
+                {% endif %}
+
+                <!-- HOVER OVERLAY -->
+                <div class="overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center p-3">
+                    {% if item.description %}
+                    <p class="text-light small">{{ item.description }}</p>
+                    {% endif %}
+                    <h5 class="text-white">{{ item.title }}</h5>
+                    <p class="text-light"><small>{{ item.created_at|date:"d M Y" }}</small></p>
+                    <div class="mt-2">
+                        {% if item.image %}
+                        <a href="{% url 'gallery:photo_detail' item.id %}" class="btn btn-sm btn-primary">View</a>
+                        <a href="{% url 'gallery:photo_update' item.id %}" class="btn btn-sm btn-warning">Update</a>
+                        <a href="{% url 'gallery:photo_delete' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% elif item.video %}
+                        <a href="{% url 'gallery:video_detail' item.id %}" class="btn btn-sm btn-primary">View</a>
+                        <a href="{% url 'gallery:video_update' item.id %}" class="btn btn-sm btn-warning">Update</a>
+                        <a href="{% url 'gallery:video_delete' item.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-center alert alert-info">No photos or videos found</p>
+    {% endfor %}
+</div>
+
+<!-- ================== PAGINATION ================== -->
+<div class="text-center mt-4">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" 
+           class="btn btn-sm" 
+           style="background-color: #0d6efd; color: white;">Prev</a>
+    {% endif %}
+
+    <span class="mx-2">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" 
+           class="btn btn-sm" 
+           style="background-color: #198754; color: white;">Next</a>
     {% endif %}
 </div>
 
-<!-- ================= Masonry JS + CSS Effects ================= -->
+<!-- ================== HOVER OVERLAY CSS ================== -->
 <style>
 .gallery-card {
     transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
 }
 .gallery-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    transform: scale(1.03);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.gallery-card .overlay {
+    background: rgba(0,0,0,0.65);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    pointer-events: none;
+}
+.gallery-card:hover .overlay {
+    opacity: 1;
+    pointer-events: auto;
 }
 </style>
-
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    var grid = document.querySelector('#gallery-grid');
-    new Masonry(grid, {
-        itemSelector: '.gallery-item',
-        columnWidth: '.gallery-item',
-        percentPosition: true,
-        gutter: 20
-    });
-});
-</script>
 
 {% endblock %}
