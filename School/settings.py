@@ -44,12 +44,13 @@ INSTALLED_APPS = [
     'members.apps.MembersConfig',
     # custom apps
     
-   
+    'gallery.apps.GalleryConfig',
     'notice.apps.NoticeConfig',
     'routine',
     'Student', 
     'School',
     'academic',
+    
     'widget_tweaks',
 ]
 

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Video Gallery{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Video Gallery</h1>
+
+{% if videos %}
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for video in videos %}
+    <div class="col">
+        <div class="card h-100">
+            <video class="card-img-top" controls width="100%">
+                <source src="{{ video.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="card-body">
+                <h5 class="card-title">{{ video.title }}</h5>
+                <p class="card-text">Uploaded on {{ video.created_at|date:"d M Y" }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="alert alert-info">No videos uploaded yet.</p>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Gallery</h1>
+<p>Explore our Photos and Videos below.</p>
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+    <div class="col">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">Photos</h5>
+                <p class="card-text">See all photos in the gallery.</p>
+                <a href="{% url 'gallery:photo_list' %}" class="btn btn-primary">Go to Photos</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100 text-center">
+            <div class="card-body">
+                <h5 class="card-title">Videos</h5>
+                <p class="card-text">See all videos in the gallery.</p>
+                <a href="{% url 'gallery:video_list' %}" class="btn btn-primary">Go to Videos</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
