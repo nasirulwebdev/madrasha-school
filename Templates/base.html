@@ -57,14 +57,18 @@
 
                 <!-- Home -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Home</a>
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        Home
+                    </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">About</a></li>
-                        <li><a class="dropdown-item" href="#">Notice Board</a></li>
+                        <li><a class="dropdown-item" href="{% url 'notice:notice_list' %}">📢 Notice Board</a></li>
+                        <li><a class="dropdown-item" href="{% url 'gallery:gallery_home' %}#photos">🖼 Photos</a></li>
+                        <li><a class="dropdown-item" href="{% url 'gallery:gallery_home' %}#videos">🎥 Videos</a></li>
                         <li><a class="dropdown-item" href="#">Blog</a></li>
-                        <li><a class="dropdown-item" href="#">Gallery</a></li>
                     </ul>
                 </li>
+
 
                 <!-- About -->
                 <li class="nav-item dropdown">
@@ -110,20 +114,41 @@
 
                 <!-- Notice -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Notice</a>
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        Notice
+                    </a>
+
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">All Notices</a></li>
+                        <li>
+                        <a class="dropdown-item" href="{% url 'notice:notice_list' %}">
+                            📢 All Notices
+                        </a>
+                        </li>
                     </ul>
-                </li>
+                    </li>
 
                 <!-- Routine -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Routine</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">List Page</a></li>
-                        <li><a class="dropdown-item" href="#">Single Page</a></li>
+
+                        <!-- All Routine -->
+                        <li>
+                            <a class="dropdown-item" href="{% url 'routine:routine_list' %}">📃 All Routine</a>
+                        </li>
+
+                        <!-- Valid Classes only -->
+                        {% for class_name in class_options %}
+                        <li>
+                            <a class="dropdown-item" href="{% url 'routine:student_routine_list' %}?class={{ class_name }}">
+                                {{ class_name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+
                     </ul>
                 </li>
+
 
                 <!-- Gallery -->
                 <li class="nav-item dropdown">

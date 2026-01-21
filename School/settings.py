@@ -77,7 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                 # ✅ এটা add করো
+                'routine.context_processors.class_options',
                 'gallery.context_processors.gallery_menu',
             ],
         },

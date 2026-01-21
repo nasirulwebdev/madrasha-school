@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Routine
 from .forms import RoutineForm
 from routine import models
+from django.views.generic import ListView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.core.paginator import Paginator
 from django.db.models import Q
 
@@ -10,38 +13,77 @@ def routine_list(request):
     routines = Routine.objects.all().order_by('-created_at')
     return render(request, 'routine/routine_list.html', {'routines': routines})
 
-def routine_list(request):
-    # Get filter values from GET request
-    day_filter = request.GET.get('day', '')
-    class_filter = request.GET.get('class', '')
-    search_query = request.GET.get('search', '')
-    # Get all routines
-    routines = Routine.objects.all().order_by('-created_at')
+# Admin/Faculty
+class RoutineListView(ListView):
+    model = Routine
+    template_name = "routine/routine_list.html"
+    context_object_name = "routines"
+    paginate_by = 5
+    ordering = ["-created_at"]
 
-    # Apply filters if provided
-    if day_filter:
-        routines = routines.filter(day__iexact=day_filter)
-    if class_filter:
-        routines = routines.filter(class_name__iexact=class_filter)
-    if search_query:
-        routines = routines.filter(
-            models.Q(title__icontains=search_query) |
-            models.Q(subject__icontains=search_query)
-        )
-        
-    # Pagination
-    paginator = Paginator(routines, 5)  # 5 per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    context = {
-        'routines': page_obj,      # template এ loop করার জন্য
-        'page_obj': page_obj,      # pagination links
-        'day_filter': day_filter,
-        'class_filter': class_filter,
-        'search_query': search_query,
-    }
-    return render(request, 'routine/routine_list.html', context)
+    def get_queryset(self):
+        qs = Routine.objects.all().order_by('-created_at')
+        search_query = self.request.GET.get("search", "")
+        class_filter = self.request.GET.get("class", "")
+        day_filter = self.request.GET.get("day", "")
+
+        if day_filter:
+            qs = qs.filter(day__iexact=day_filter)
+        if class_filter:
+            qs = qs.filter(class_name__iexact=class_filter)
+        if search_query:
+            qs = qs.filter(
+                Q(title__icontains=search_query) |
+                Q(subject__icontains=search_query)
+            )
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get("search", "")
+        context["class_filter"] = self.request.GET.get("class", "")
+        context["day_filter"] = self.request.GET.get("day", "")
+        context["class_options"] = [f"Class {i}" for i in range(1, 13)]
+        return context
+
+# Student
+@method_decorator(login_required, name="dispatch")
+class StudentRoutineListView(ListView):
+    model = Routine
+    template_name = "routine/student_routine_list.html"
+    context_object_name = "routines"
+    paginate_by = 5
+    ordering = ["day", "start_time"]
+
+    def get_queryset(self):
+        class_filter = self.request.GET.get("class", None)
+        search_query = self.request.GET.get("search", "")
+        day_filter = self.request.GET.get("day", "")
+
+        qs = Routine.objects.all().order_by("day", "start_time")
+
+        if class_filter:
+            qs = qs.filter(class_name__iexact=class_filter)
+
+        if search_query:
+            qs = qs.filter(
+                Q(title__icontains=search_query) |
+                Q(subject__icontains=search_query) |
+                Q(teacher__icontains=search_query)
+            )
+
+        if day_filter:
+            qs = qs.filter(day__iexact=day_filter)
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["search_query"] = self.request.GET.get("search", "")
+        context["day_filter"] = self.request.GET.get("day", "")
+        context["class_filter"] = self.request.GET.get("class", "")
+        context["class_options"] = [f"Class {i}" for i in range(1,13)]
+        return context
 
 def routine_create(request):
     if request.method == 'POST':

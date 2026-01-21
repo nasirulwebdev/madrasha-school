@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Your Class Routine</h2>
+
+<form method="GET" class="d-flex gap-2 mb-3">
+        <select name="day" class="form-select">
+            <option value="">All Days</option>
+            <option value="Saturday" {% if day_filter|default:"" == "Saturday" %}selected{% endif %}>Saturday</option>
+            <option value="Sunday" {% if day_filter|default:"" == "Sunday" %}selected{% endif %}>Sunday</option>
+            <option value="Monday" {% if day_filter|default:"" == "Monday" %}selected{% endif %}>Monday</option>
+            <option value="Tuesday" {% if day_filter|default:"" == "Tuesday" %}selected{% endif %}>Tuesday</option>
+            <option value="Wednesday" {% if day_filter|default:"" == "Wednesday" %}selected{% endif %}>Wednesday</option>
+            <option value="Thursday" {% if day_filter|default:"" == "Thursday" %}selected{% endif %}>Thursday</option>
+            <option value="Friday" {% if day_filter|default:"" == "Friday" %}selected{% endif %}>Friday</option>
+        </select>
+
+    <button class="btn btn-primary">Filter</button>
+    <a href="{% url 'routine:student_routine_list' %}" class="btn btn-secondary">Reset</a>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Day</th>
+            <th>Subject</th>
+            <th>Teacher</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for routine in routines %}
+        <tr>
+            <td>{{ routine.title }}</td>
+            <td>{{ routine.day }}</td>
+            <td>{{ routine.subject }}</td>
+            <td>{{ routine.teacher }}</td>
+            <td>{{ routine.start_time|time:"H:i" }} - {{ routine.end_time|time:"H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center text-danger">No routines found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Pagination -->
+{% if page_obj.paginator.num_pages > 1 %}
+<nav aria-label="Routines pagination">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&day={{ day_filter }}">Previous</a>
+        </li>
+        {% endif %}
+        {% for num in page_obj.paginator.page_range %}
+        <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+            <a class="page-link" href="?page={{ num }}&search={{ search_query }}&day={{ day_filter }}">{{ num }}</a>
+        </li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&day={{ day_filter }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
